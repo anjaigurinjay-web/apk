@@ -1,0 +1,795 @@
+/* ================= CSS RESET & BASE STYLES ================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: radial-gradient(circle at top left, #3b0764, #1a1025);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow: hidden;
+}
+
+/* ================= APP CONTAINER FRAME ================= */
+.app-container {
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    max-width: 430px;
+    max-height: 900px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    background: #1e1333;
+}
+
+@media (min-width: 450px) {
+    .app-container {
+        border-radius: 44px;
+        height: 92vh;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* ================= LIQUID GLASS BENING MURNI (KACA CAIR) ================= */
+.liquid-glass {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    ) !important;
+    
+    backdrop-filter: blur(24px) saturate(220%);
+    -webkit-backdrop-filter: blur(24px) saturate(220%);
+    
+    border-top: 1.5px solid rgba(255, 255, 255, 0.75);
+    border-left: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-right: 1.5px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.15);
+    
+    box-shadow: 
+        0 16px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* ================= VIEWS WRAPPER & PANES (ANIMASI IN-OUT HALAMAN) ================= */
+.views-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    perspective: 1200px;
+}
+
+.view-pane {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 140px;
+    
+    /* Keadaan Keluar (Out) - Mengecil sedikit, agak buram, dan memudar ke belakang */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.94) translateY(16px);
+    filter: blur(8px);
+    transform-origin: center 40%;
+    transition: 
+        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.48s;
+}
+
+.view-pane.active {
+    /* Keadaan Masuk (In) - Kembali ke ukuran penuh, tajam, dan siap disentuh */
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+    z-index: 5;
+}
+
+.view-pane::-webkit-scrollbar {
+    display: none;
+}
+
+/* ================= BACKGROUND BLOBS (SUMBER CAHAYA KACA) ================= */
+.bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.blob-1 {
+    width: 250px;
+    height: 250px;
+    background: #c084fc;
+    top: -40px;
+    right: -40px;
+    opacity: 0.8;
+}
+
+.blob-2 {
+    width: 280px;
+    height: 280px;
+    background: #ec4899;
+    bottom: 40px;
+    left: -60px;
+    opacity: 0.6;
+}
+
+/* ================= HEADER & FILTER TABS ================= */
+.home-header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 22px 16px 22px;
+}
+
+.subtitle {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #f472b6;
+    margin-bottom: 2px;
+}
+
+.main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.filter-tabs {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    padding: 0 22px 18px 22px;
+}
+
+.tab-pill {
+    padding: 8px 16px;
+    border-radius: 99px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #f3e8ff;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s, box-shadow 0.25s;
+}
+
+.tab-pill:active {
+    transform: scale(0.92);
+}
+
+.tab-pill.active {
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 18px rgba(236, 72, 153, 0.3);
+}
+
+/* ================= SONG LIST & CARDS ================= */
+.song-list {
+    position: relative;
+    z-index: 10;
+    padding: 0 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.song-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    border-radius: 22px;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.song-card:active {
+    transform: scale(0.96);
+}
+
+.mini-cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.song-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.song-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+}
+
+.song-artist {
+    font-size: 13px;
+    color: #f3e8ff;
+    opacity: 0.7;
+}
+
+.song-duration {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f3e8ff;
+    opacity: 0.6;
+    padding-right: 4px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    color: #ffffff;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.search-input:focus {
+    border-color: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.2);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* ================= BOTTOM NAVIGATION (LIQUID GLASS MURNI) ================= */
+.bottom-nav {
+    position: absolute;
+    bottom: 16px;
+    left: 18px;
+    right: 18px;
+    z-index: 30;
+    height: 68px;
+    border-radius: 26px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 8px;
+    
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.22) 0%,
+        rgba(255, 255, 255, 0.06) 100%
+    ) !important;
+    backdrop-filter: blur(24px) saturate(220%);
+    -webkit-backdrop-filter: blur(24px) saturate(220%);
+    border-top: 1.5px solid rgba(255, 255, 255, 0.8);
+    border-left: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-right: 1.5px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    flex: 1;
+    height: 82%;
+    border-radius: 18px;
+    position: relative;
+    transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-item span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: transform 0.3s ease;
+}
+
+.nav-item svg {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.3s;
+}
+
+.nav-item:active {
+    transform: scale(0.85);
+}
+
+.nav-item.active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 
+        0 8px 20px rgba(236, 72, 153, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
+}
+
+.nav-item.active svg {
+    transform: scale(1.12);
+    stroke: #f472b6;
+}
+
+.nav-item.active span {
+    font-weight: 700;
+    transform: scale(1.05);
+}
+
+/* ================= MINI PLAYER ================= */
+.mini-player {
+    position: absolute;
+    bottom: 92px;
+    left: 18px;
+    right: 18px;
+    z-index: 25;
+    padding: 10px 14px;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+.mini-player-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.mini-player-art {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+.mini-player-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.mini-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mini-artist {
+    font-size: 12px;
+    color: #f3e8ff;
+    opacity: 0.7;
+}
+
+.mini-play-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(236, 72, 153, 0.4);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mini-play-btn:active {
+    transform: scale(0.88);
+}
+
+/* ================= PLAYER FULL SCREEN VIEW (ANIMASI IN-OUT LEMBUT) ================= */
+.player-view {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #1e1333;
+    
+    /* Keadaan Keluar (Out) - Turun ke bawah dengan sedikit skala menyusut dan pudar */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(100%) scale(0.96);
+    border-radius: 44px 44px 0 0;
+    transition: 
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        border-radius 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0.55s;
+}
+
+.player-view.open {
+    /* Keadaan Masuk (In) - Naik mulus memenuhi layar */
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    border-radius: 0;
+}
+
+.album-art-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.album-bg-blur {
+    position: absolute;
+    inset: -30px;
+    background: #3b0764;
+    background-size: cover;
+    background-position: center;
+    filter: blur(45px) saturate(160%) brightness(0.85);
+    transform: scale(1.1);
+}
+
+.album-art-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+}
+
+.album-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(
+        to bottom,
+        rgba(30, 19, 51, 0.3) 0%,
+        transparent 30%,
+        transparent 55%,
+        rgba(30, 19, 51, 0.8) 100%
+    );
+}
+
+.top-bar {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 0 20px;
+    gap: 12px;
+}
+
+.back-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+}
+
+.back-btn:active {
+    transform: scale(0.84);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.title-pill {
+    flex: 1;
+    height: 44px;
+    border-radius: 22px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    margin-right: 52px; 
+}
+
+.marquee-wrapper {
+    display: flex;
+    width: max-content;
+    animation: marqueeScroll 10s linear infinite;
+}
+
+.marquee-wrapper:hover {
+    animation-play-state: paused;
+}
+
+.song-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+    padding-right: 40px;
+}
+
+@keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    15% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.menu-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 30;
+}
+
+.morph-menu {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    overflow: hidden;
+    transition: 
+        width 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
+        height 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
+        border-radius 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.morph-menu.open {
+    width: 210px;
+    height: 138px;
+    border-radius: 26px;
+}
+
+.menu-trigger {
+    width: 44px;
+    height: 44px;
+    align-self: flex-end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.menu-arrow {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: rotate(90deg);
+}
+
+.morph-menu.open .menu-arrow {
+    transform: rotate(-90deg);
+}
+
+.menu-content {
+    padding: 0 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.25s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.morph-menu.open .menu-content {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.1s;
+    pointer-events: auto;
+}
+
+.menu-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.fav-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    padding: 6px 12px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+}
+
+.fav-btn:active {
+    transform: scale(0.9);
+}
+
+.fav-btn.liked {
+    background: #ec4899;
+    border-color: #ffffff;
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.volume-slider::-webkit-slider-thumb:active {
+    transform: scale(1.25);
+}
+
+.bottom-dock {
+    position: relative;
+    z-index: 10;
+    margin: 0 18px 24px 18px;
+    padding: 22px 24px;
+    border-radius: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.artist-info {
+    text-align: center;
+}
+
+.artist-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.progress-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.progress-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 99px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(95deg, #ffffff, #f472b6);
+    border-radius: 99px;
+    transition: width 0.1s linear;
+}
+
+.time-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ctrl-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s;
+}
+
+.ctrl-btn:active {
+    transform: scale(0.82);
+}
+
+.ctrl-btn.active {
+    color: #f472b6;
+}
+
+.play-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(236, 72, 153, 0.45);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.play-btn:active {
+    transform: scale(0.88);
+}
