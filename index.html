@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taro Liquid Glass Player</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- PWA Manifest & Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2e1065">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- ================= KONTEN HALAMAN (VIEWS) ================= -->
+        <div class="views-wrapper">
+            
+            <!-- 1. VIEW BERANDA -->
+            <div class="view-pane active" id="viewHome">
+                <div class="bg-blob blob-1"></div>
+                <div class="bg-blob blob-2"></div>
+
+                <header class="home-header">
+                    <div>
+                        <p class="subtitle">Offline Music</p>
+                        <h1 class="main-title">Koleksiku</h1>
+                    </div>
+                </header>
+
+                <div class="filter-tabs">
+                    <button class="tab-pill active" data-tab="all">Semua Lagu</button>
+                    <button class="tab-pill liquid-glass" data-tab="recent">Terbaru</button>
+                </div>
+
+                <!-- Daftar lagu kosong, siap diisi lagu pilihanmu -->
+                <main class="song-list" id="dynamicSongList">
+                    <div class="empty-state">
+                        <p style="color: #6b21a8; font-size: 14px; text-align: center; padding: 40px 0;">Belum ada lagu. Masuk ke menu <b>Tambah</b> untuk mengunggah file MP3.</p>
+                    </div>
+                </main>
+            </div>
+
+            <!-- 2. VIEW FAVORIT -->
+            <div class="view-pane" id="viewFav">
+                <header class="home-header">
+                    <div>
+                        <p class="subtitle">Disukai</p>
+                        <h1 class="main-title">Favorit Saya</h1>
+                    </div>
+                </header>
+                <main class="song-list" id="favSongList">
+                    <div class="empty-state">
+                        <p style="color: #6b21a8; font-size: 14px; text-align: center; padding: 40px 0;">Belum ada lagu favorit.</p>
+                    </div>
+                </main>
+            </div>
+
+            <!-- 3. VIEW CARI LAGU -->
+            <div class="view-pane" id="viewSearch">
+                <header class="home-header">
+                    <div>
+                        <p class="subtitle">Eksplorasi</p>
+                        <h1 class="main-title">Cari Lagu</h1>
+                    </div>
+                </header>
+                <div style="padding: 0 22px;">
+                    <input type="text" id="searchInput" class="search-input liquid-glass" placeholder="Ketik judul atau artis...">
+                </div>
+            </div>
+
+            <!-- 4. VIEW TAMBAH MUSIK -->
+            <div class="view-pane" id="viewAdd">
+                <header class="home-header">
+                    <div>
+                        <p class="subtitle">Koleksi Baru</p>
+                        <h1 class="main-title">Tambah Musik</h1>
+                    </div>
+                </header>
+                <div style="padding: 0 22px; display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; height: 60%;">
+                    <div class="liquid-glass" style="padding: 30px; border-radius: 24px; text-align: center; width: 100%;">
+                        <p style="color: #2e1065; font-weight: 600; margin-bottom: 12px;">Pilih file MP3 dari perangkatmu</p>
+                        <input type="file" id="mp3FileInput" accept="audio/mp3, audio/mpeg" multiple style="display: none;">
+                        <button class="tab-pill active" onclick="document.getElementById('mp3FileInput').click()" style="border: none; padding: 12px 24px;">Pilih File Audio</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= MINI PLAYER ================= -->
+        <div class="mini-player liquid-glass" id="miniPlayer" style="display: none;">
+            <div class="mini-player-link" data-open-player>
+                <div class="mini-player-art" style="background: #a78bfa; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">♪</div>
+                <div class="mini-player-info">
+                    <span class="mini-title" id="miniTitle">Pilih Lagu</span>
+                    <span class="mini-artist" id="miniArtist">Artis</span>
+                </div>
+            </div>
+            <button class="mini-play-btn" id="miniPlayBtn" aria-label="Play/Pause">
+                <svg id="miniPlayIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- ================= NAVIGASI MENU BAWAH (LIQUID GLASS) ================= -->
+        <nav class="bottom-nav liquid-glass">
+            <button class="nav-item active" data-target="viewHome">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Beranda</span>
+            </button>
+            <button class="nav-item" data-target="viewFav">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.04 3 5.5l7 7Z"/></svg>
+                <span>Favorit</span>
+            </button>
+            <button class="nav-item" data-target="viewSearch">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Cari</span>
+            </button>
+            <button class="nav-item" data-target="viewAdd">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                <span>Tambah</span>
+            </button>
+        </nav>
+
+        <!-- ================= HALAMAN PEMUTAR FULL SCREEN (PLAYER VIEW) ================= -->
+        <div class="player-view" id="playerView">
+            <div class="album-art-wrapper">
+                <div class="album-bg-blur"></div>
+                <div class="album-art-main" style="display: flex; align-items: center; justify-content: center; font-size: 80px; color: rgba(255,255,255,0.2);">🎵</div>
+                <div class="album-overlay"></div>
+            </div>
+
+            <div class="top-bar">
+                <button class="back-btn liquid-glass" id="backBtn" aria-label="Kembali">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <div class="title-pill liquid-glass">
+                    <div class="marquee-wrapper">
+                        <span class="song-title" id="fullSongTitle">Pilih lagu untuk memutar</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-container">
+                <div class="morph-menu liquid-glass" id="morphMenu">
+                    <button class="menu-trigger" id="menuTrigger" aria-label="Menu">
+                        <svg class="menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                    <div class="menu-content">
+                        <div class="menu-row">
+                            <span>Favorit</span>
+                            <button class="fav-btn" id="favBtn"><span id="heartIcon">♡</span> Simpan</button>
+                        </div>
+                        <div class="menu-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="0.75">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-dock liquid-glass">
+                <div class="artist-info"><div class="artist-name" id="fullArtistName">Offline Collection</div></div>
+                <div class="progress-area">
+                    <div class="progress-track" id="progressTrack">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="time-labels">
+                        <span id="currentTime">00:00</span>
+                        <span id="totalDuration">00:00</span>
+                    </div>
+                </div>
+                <div class="controls-row">
+                    <button class="ctrl-btn" id="shuffleBtn" aria-label="Shuffle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                    </button>
+                    <button class="ctrl-btn" id="prevBtn" aria-label="Previous">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                    </button>
+                    <button class="play-btn" id="playBtn" aria-label="Play/Pause">
+                        <svg id="playIcon" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button class="ctrl-btn" id="nextBtn" aria-label="Next">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                    </button>
+                    <button class="ctrl-btn" id="repeatBtn" aria-label="Repeat">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Elemen Audio HTML5 Asli untuk Memutar MP3 -->
+    <audio id="audioPlayer"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
